@@ -11,7 +11,7 @@ var passport = require('passport');
 var localStrategy = require('passport-local').Strategy;
 
 
-var secret = require('./config/secret');
+var config = require('./config/config');
 var User = require('./models/user');
 
 var app = express();
@@ -24,8 +24,8 @@ app.use(cookieParser());
 app.use(session({
     resave: true,
     saveUninitialized: true,
-    secret: secret.secretKey,
-    store: new mongoStore({ url: secret.database, autoReconnect: true })
+    secret: config.secretKey,
+    store: new mongoStore({ url: config.database, autoReconnect: true })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,7 +45,7 @@ var userRoutes = require('./routes/user');
 app.use('/', mainRoutes);
 app.use('/user/', userRoutes);
 
-mongoose.connect(secret.database, function(err){
+mongoose.connect(config.database, function(err){
     if(err){
         console.log(err);
     }else{
@@ -53,7 +53,7 @@ mongoose.connect(secret.database, function(err){
     }
 });
 
-app.listen(secret.port, function(err){
+app.listen(config.port, function(err){
     if(err) throw err;
     console.log('App is running');
 })
