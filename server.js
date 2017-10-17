@@ -13,6 +13,8 @@ var localStrategy = require('passport-local').Strategy;
 
 var config = require('./config/config');
 var User = require('./models/user');
+var Category = require('./models/category');
+
 
 var app = express();
 
@@ -37,13 +39,25 @@ app.use(flash());
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
-
+app.use(function(req, res, next){
+    Category.find({}, function(err, categories){
+        if(err) return next(err);
+        res.locals.categories = categories;
+        next();
+    })
+})
 // Routes
 var mainRoutes = require('./routes/main');
 var userRoutes = require('./routes/user');
+var adminRoutes = require('./routes/admin');
+var categoryRoutes = require('./routes/category');
+var productRoutes = require('./routes/product');
 
 app.use('/', mainRoutes);
 app.use('/user/', userRoutes);
+app.use('/admin/', adminRoutes);
+app.use('/category/', categoryRoutes);
+app.use('/product/', productRoutes);
 
 mongoose.connect(config.database, function(err){
     if(err){
