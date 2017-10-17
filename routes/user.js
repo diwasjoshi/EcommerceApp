@@ -63,26 +63,29 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
+  User.findById(id, function(err, user) {
     done(err, user);
   });
 });
 
-passport.use(new localStrategy(function(username, password, done){
-    User.findOne({ email: req.body.email }, function(err, user){
-        if(err) throw err;
-        if(!user){
-            return done(null, false, {error: 'User does not exist'});
+passport.use(new localStrategy({
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true
+  }, function(req, email, password, done) {
+      User.findOne({ email: email}, function(err, user) {
+        if (err) return done(err);
+
+        if (!user) {
+          return done(null, false, req.flash('loginMessage', 'No user has been found'));
         }
-        user.comparePassword(password, user.password, function(err, isMatch){
-            if(err) return done(err);
-            if(isMatch){
-                return done(null, user);
-            }else{
-                return done(null, false, {error: 'Invalid Password'});
-            }
-        })
-    })
+
+        if(user.comparePassword(password)){
+            return done(null, user);
+        }else{
+            return done(null, false, {message: 'Invalid Password'});
+        }
+      });
 }));
 
 router.get('/logout', function(req, res, next) {
