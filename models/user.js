@@ -23,13 +23,14 @@ var UserSchema = new Schema({
 
 
 /* create user */
-UserSchema.methods.createUser = function(newUser, callback){
+UserSchema.methods.createUser = function(callback){
+    var self = this;
     bcrypt.genSalt(10, function(err, salt) {
       if (err) return next(err);
-      bcrypt.hash(newUser.password, salt, null, function(err, hash) {
+      bcrypt.hash(self.password, salt, null, function(err, hash) {
         if (err) return next(err);
-        newUser.password = hash;
-        newUser.save(callback);
+        self.password = hash;
+        self.save(callback);
       });
     });
 }
