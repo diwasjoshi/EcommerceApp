@@ -54,6 +54,7 @@ var userRoutes = require('./routes/user');
 var adminRoutes = require('./routes/admin');
 var categoryRoutes = require('./routes/category');
 var productRoutes = require('./routes/product');
+var cartRoutes = require('./routes/cart');
 var searchApi = require('./api/search');
 var fakerApi = require('./api/faker');
 
@@ -62,6 +63,7 @@ app.use('/user/', userRoutes);
 app.use('/admin/', adminRoutes);
 app.use('/category/', categoryRoutes);
 app.use('/product/', productRoutes);
+app.use('/cart/', cartRoutes);
 app.use('/api/search/', searchApi);
 app.use('/api/faker/', fakerApi);
 
