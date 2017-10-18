@@ -3,7 +3,11 @@ var router = require('express').Router();
 
 
 router.get('/', function(req, res){
-    res.render('main/home');
+    if(req.user){
+        return res.redirect('/product');
+    }else{
+        res.render('main/home');
+    }
 });
 
 router.get('/about', function(req, res){

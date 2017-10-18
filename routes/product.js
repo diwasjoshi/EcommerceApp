@@ -47,4 +47,28 @@ router.post('/search', function(req, res, next) {
   });
 });
 
+router.get('/', function(req, res, next) {
+    return res.redirect('/product/page/1');
+});
+
+router.get('/page/:page', function(req, res, next) {
+    var pageSize = 10;
+    var page = req.params.page;
+    Product
+        .find()
+        .skip(pageSize*page)
+        .limit(pageSize)
+        .populate('category')
+        .exec(function(err, products){
+            if (err) return next(err);
+            Product.count().exec(function(err, count) {
+                if (err) return next(err);
+                res.render('main/product-main', {
+                    products: products,
+                    pages: count / pageSize
+            });
+        });
+  });
+});
+
 module.exports = router;
