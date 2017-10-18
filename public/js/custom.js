@@ -40,4 +40,17 @@ $(function() {
       }
     });
   });
+
+  $(document).on('click', '#plus, #minus', function(e) {
+    e.preventDefault();
+    var quantity = parseInt($('#quantity').val());
+    quantity += parseInt($(this).attr('data-value'));
+    quantity = quantity < 1 ? 1 : quantity;
+
+    var priceValue = parseFloat($('#priceHidden').val()) * quantity;
+    $('#quantity').val(quantity);
+    $('#priceValue').val(priceValue.toFixed(2));
+    $('#total').html(quantity);
+  });
+
 });
