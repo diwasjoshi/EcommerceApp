@@ -14,7 +14,7 @@ var localStrategy = require('passport-local').Strategy;
 var config = require('./config/config');
 var User = require('./models/user');
 var Category = require('./models/category');
-
+var cartLength = require('./middlewares/cartlength');
 
 var app = express();
 
@@ -45,7 +45,9 @@ app.use(function(req, res, next){
         res.locals.categories = categories;
         next();
     })
-})
+});
+app.use(cartLength);
+
 // Routes
 var mainRoutes = require('./routes/main');
 var userRoutes = require('./routes/user');
@@ -53,6 +55,7 @@ var adminRoutes = require('./routes/admin');
 var categoryRoutes = require('./routes/category');
 var productRoutes = require('./routes/product');
 var searchApi = require('./api/search');
+var fakerApi = require('./api/faker');
 
 app.use('/', mainRoutes);
 app.use('/user/', userRoutes);
@@ -60,6 +63,7 @@ app.use('/admin/', adminRoutes);
 app.use('/category/', categoryRoutes);
 app.use('/product/', productRoutes);
 app.use('/api/search/', searchApi);
+app.use('/api/faker/', fakerApi);
 
 mongoose.connect(config.database, function(err){
     if(err){

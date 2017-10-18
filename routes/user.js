@@ -1,5 +1,7 @@
 var router = require('express').Router();
 var User = require('../models/user');
+var Cart = require('../models/cart');
+
 var passport = require('passport');
 var localStrategy = require('passport-local').Strategy;
 
@@ -21,7 +23,7 @@ router.get('/register', function(req, res, next){
 
 router.post('/register', function(req, res, next){
     var user = new User();
-
+    console.log(user);
     user.profile.name = req.body.name;
     user.email = req.body.email;
     user.password = req.body.password;
@@ -34,8 +36,15 @@ router.post('/register', function(req, res, next){
         } else {
             user.createUser(function(err, user){
                 if(err) return next(err);
-
-                return res.redirect('profile');
+                var cart = new Cart();
+                cart.owner = user._id;
+                cart.save(function(err) {
+                    if (err) return next(err);
+                    req.logIn(user, function(err) {
+                      if (err) return next(err);
+                      res.redirect('profile');
+                    });
+                });
             });
         }
     });
