@@ -52,12 +52,14 @@ var userRoutes = require('./routes/user');
 var adminRoutes = require('./routes/admin');
 var categoryRoutes = require('./routes/category');
 var productRoutes = require('./routes/product');
+var searchApi = require('./api/search');
 
 app.use('/', mainRoutes);
 app.use('/user/', userRoutes);
 app.use('/admin/', adminRoutes);
 app.use('/category/', categoryRoutes);
 app.use('/product/', productRoutes);
+app.use('/api/search/', searchApi);
 
 mongoose.connect(config.database, function(err){
     if(err){

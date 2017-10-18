@@ -5,7 +5,7 @@ $(function() {
     var search_term = $(this).val();
 
     $.ajax({
-      method: 'POST',
+      method: 'GET',
       url: '/api/search',
       data: {
         search_term
@@ -40,12 +40,4 @@ $(function() {
       }
     });
   });
-
-
-
-
-
-
-
-
-})
+});
